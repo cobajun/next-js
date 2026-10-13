@@ -1,0 +1,32 @@
+.detail{
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 120px;
+}
+.main{
+  margin-bottom: 32px;
+  line-height: 0;
+  img{
+    width: 100%;
+  }
+}
+.title{
+  font-size: 32px;
+  font-weight: 500;
+  margin: 12px 0 16px 0;
+  @media (max-width: 640px){
+    font-size: 20px;
+  }
+}
+.back{
+  padding-top: 40px;
+}
+.btn{
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 30px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}

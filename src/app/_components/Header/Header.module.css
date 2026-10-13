@@ -1,0 +1,12 @@
+.header{
+  margin-bottom: 48px;
+  padding: 16px 20px;
+  background: var(--primary);
+  color: #fff;
+}
+.inner{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}

@@ -1,0 +1,86 @@
+
+.form{
+  padding: 40px 0;
+  @media (max-width: 670px){
+    padding: 20px 0;
+  }
+}
+.item{
+  display: flex;
+  margin-bottom: 20px;
+  @media (max-width: 670px){
+    display: block;
+  }
+  label {
+    display: block;
+    width: 200px;
+    font-weight: 500;
+    @media (max-width: 670px){
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+  div {
+    width: calc(100% - 200px);
+    @media (max-width: 670px){
+      width: 100%;
+    }
+  }
+  input[type="text"], input[type="email"], textarea {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    font-weight: 400;
+    font-family: var(--font-zen-kaku), sans-serif;
+    font-size: 16px;
+  }
+  textarea {
+    height: 240px;
+    @media (max-width: 670px){
+      height: 200px;
+    }
+  }
+}
+.btn{
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 56px;
+  @media (max-width: 670px){
+    margin-top: 32px;
+  }
+  input, button{
+    width: 160px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    background: var(--primary);
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s;
+    @media (max-width: 768px){
+      transition: none;
+    }
+  }
+  input:hover,
+  button:hover {
+    opacity: 0.8;
+    @media (max-width: 768px){
+      opacity: 1;
+    }
+  }
+  .clear{
+    background: #dedede;
+    color: #444;
+  }
+}
+
+.error {
+  margin-top: 4px;
+  color: #ff0000;
+}

@@ -1,5 +1,6 @@
 .link{
   display: flex;
+  align-items: center;
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
   @media (max-width: 640px){
@@ -35,9 +36,9 @@
   }
 }
 .title{
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   @media (max-width: 640px){
     font-size: 16px;
   }
@@ -45,6 +46,7 @@
 .excerpt {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   overflow: hidden;
+  line-height: 1.8;
 }

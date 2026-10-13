@@ -4,18 +4,26 @@
   padding-bottom: 120px;
 }
 .main{
-  margin-bottom: 32px;
+  margin-top: 32px;
   line-height: 0;
   img{
     width: 100%;
+    border: 1px solid #ccc;
   }
 }
 .title{
   font-size: 32px;
   font-weight: 500;
-  margin: 12px 0 16px 0;
+  margin: 12px 0 24px 0;
   @media (max-width: 640px){
     font-size: 20px;
+    margin: 12px 0 16px 0;
+  }
+}
+.contents{
+  line-height: 2;
+  p {
+    margin-bottom: 1em;
   }
 }
 .back{

@@ -1,22 +1,27 @@
 "use client"
+import styles from './page.module.css';
 import { ArticleList } from '@/app/_components/ArticleList'; 
 import { useEffect, useState } from 'react';
-import type { Post } from '@/app/_types/posts';
+import type { MicroCmsPost } from '@/app/_types/posts';
 
 export default function Home() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<MicroCmsPost[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   
  useEffect(() => {
      const getData = async () => {
       try {
-        const res = await fetch("https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts");
+        const res = await fetch('https://subacoba.microcms.io/api/v1/posts', {
+          headers: {
+            'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY || '',
+          },
+        });
         if (!res.ok) {
           throw new Error('データの取得に失敗しました。');
         }
-        const data = await res.json();
-        setPosts(data.posts);
+        const { contents } = await res.json();
+        setPosts(contents);
       } catch {
         setError('データの取得に失敗しました。');
       } finally {
@@ -45,7 +50,7 @@ export default function Home() {
   return (
     <>
       <h1 className="pagetitle">記事一覧</h1>
-      <section>
+      <section className={styles.list}>
         {sorted.map(elem =>
           <ArticleList post={elem} key={elem.id} />
         )}

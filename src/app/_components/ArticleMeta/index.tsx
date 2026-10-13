@@ -3,7 +3,7 @@ import styles from './ArticleMeta.module.css';
 
 type Props = {
   createdAt: string;
-  categories: string[];
+  categories: { id: string; name: string }[]
 }
 
 export const ArticleMeta = ({ createdAt, categories }: Props) => {
@@ -13,7 +13,7 @@ export const ArticleMeta = ({ createdAt, categories }: Props) => {
       <div className={styles.date}>{`${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`}</div>
       <ul className={styles.category}>
         {categories.map(category =>
-          <li key={category}>{category}</li>
+          <li key={category.id}>{category.name}</li>
         )}
       </ul>
     </div>

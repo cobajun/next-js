@@ -1,5 +1,6 @@
 "use client"
-import styles from '@/app/admin/_styles/form.module.css';
+import { CategoryForm } from '@/app/admin/categories/_components/CategoryForm';
+import type { AdminCreateCategoryRequest } from '@/app/api/admin/categories/route';
 import { useState } from 'react';
 
 type Errors = {
@@ -30,12 +31,13 @@ export default function CreateCategory() {
     
     setIsSubmit(true);
     try {
+      const body: AdminCreateCategoryRequest = { name };
       const res = await fetch("/api/admin/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({name})
+        body: JSON.stringify(body)
       });
       if (!res.ok) {
           throw new Error('作成に失敗しました。時間をおいて再度お試しください。');
@@ -54,24 +56,14 @@ export default function CreateCategory() {
   return (
     <>
       <h1 className="pagetitle">カテゴリ作成</h1>
-      <section className={styles.form}>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.item}>
-            <label htmlFor="name" className={styles.label}>カテゴリ名</label>
-            <div>
-              <input type="text"  name="name" id="name" placeholder="カテゴリ名を入力してください" value={name} onChange={e => setName(e.target.value)} disabled={isSubmit} />
-              {errors.name && <p className={styles.error}>{errors.name}</p>}
-            </div>
-          </div>
-
-          <div className={styles.btn}>
-            <button type="submit" disabled={isSubmit}>
-              作 成
-            </button>
-          </div>
-        </form>
-      </section>
+      <CategoryForm
+        name={name}
+        setName={setName}
+        isSubmit={isSubmit}
+        errors={errors}
+        handleSubmit={handleSubmit}
+        submitLabel="作 成"
+      />
     </>
-
   );
 };

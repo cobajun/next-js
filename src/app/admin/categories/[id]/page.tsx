@@ -1,8 +1,8 @@
 "use client"
-import styles from '@/app/admin/_styles/form.module.css';
+import { CategoryForm } from '@/app/admin/categories/_components/CategoryForm';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import type { AdminCategoryShowResponse } from '@/app/api/admin/categories/[id]/route';
+import type { AdminCategoryShowResponse, AdminUpdateCategoryRequest } from '@/app/api/admin/categories/[id]/route';
 
 type Errors = {
   [key: string]: string;
@@ -50,12 +50,13 @@ export default function ModifyCategory() {
     
     setIsSubmit(true);
     try {
+      const body: AdminUpdateCategoryRequest = { name };
       const res = await fetch(`/api/admin/categories/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({name})
+        body: JSON.stringify(body)
       });
       if (!res.ok) {
           throw new Error('更新に失敗しました。時間をおいて再度お試しください。');
@@ -93,27 +94,15 @@ export default function ModifyCategory() {
   return (
     <>
       <h1 className="pagetitle">カテゴリ編集/削除</h1>
-      <section className={styles.form}>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.item}>
-            <label htmlFor="name" className={styles.label}>カテゴリ名</label>
-            <div>
-              <input type="text"  name="name" id="name" placeholder="カテゴリ名を入力してください" value={name} onChange={e => setName(e.target.value)} disabled={isSubmit} />
-              {errors.name && <p className={styles.error}>{errors.name}</p>}
-            </div>
-          </div>
-
-          <div className={styles.btn}>
-            <button type="submit" disabled={isSubmit}>
-              更 新
-            </button>
-            <button type="button" disabled={isSubmit} className={styles.deleteBtn} onClick={handleDelete}>
-              削 除
-            </button>
-          </div>
-        </form>
-      </section>
+      <CategoryForm
+        name={name}
+        setName={setName}
+        isSubmit={isSubmit}
+        errors={errors}
+        handleSubmit={handleSubmit}
+        handleDelete={handleDelete}
+        submitLabel="更 新"
+      />
     </>
-
   );
 };

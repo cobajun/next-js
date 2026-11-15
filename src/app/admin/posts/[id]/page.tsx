@@ -1,9 +1,9 @@
 "use client"
-import styles from '@/app/admin/_styles/form.module.css';
 import { useEffect, useState } from 'react';
 import type { AdminCategoriesIndexResponse } from '@/app/api/admin/categories/route';
-import type { AdminPostShowResponse } from '@/app/api/admin/posts/[id]/route';
+import type { AdminPostShowResponse, AdminUpdatePostRequest } from '@/app/api/admin/posts/[id]/route';
 import { useParams, useRouter } from 'next/navigation';
+import { PostForm } from '../_components/PostForm';
 
 type Errors = {
   [key: string]: string;
@@ -85,17 +85,18 @@ export default function ModifyPost() {
     
     setIsSubmit(true);
     try {
+      const body: AdminUpdatePostRequest = {
+        title,
+        thumbnailUrl,
+        content,
+        categories: selectedCategoryIds.map(id => ({ id })),
+      };
       const res = await fetch(`/api/admin/posts/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          title,
-          thumbnailUrl,
-          content,
-          categories: selectedCategoryIds.map(id => ({ id })), //({ id: id }))
-        })
+        body: JSON.stringify(body)
       });
       if (!res.ok) {
           throw new Error('更新に失敗しました。時間をおいて再度お試しください。');
@@ -133,68 +134,22 @@ export default function ModifyPost() {
   return (
     <>
       <h1 className="pagetitle">記事編集/削除</h1>
-      <section className={styles.form}>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.item}>
-            <label htmlFor="title" className={styles.label}>タイトル</label>
-            <div>
-              <input type="text"  name="title" id="title" placeholder="タイトルを入力してください" value={title} onChange={e => setTitle(e.target.value)} disabled={isSubmit} />
-              {errors.title && <p className={styles.error}>{errors.title}</p>}
-            </div>
-          </div>
-          <div className={styles.item}>
-            <label htmlFor="thumbnailUrl" className={styles.label}>サムネイルURL</label>
-            <div>
-              <input type="text"  name="thumbnailUrl" id="thumbnailUrl" placeholder="サムネイルURLを入力してください" value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} disabled={isSubmit} />
-              {errors.thumbnailUrl && <p className={styles.error}>{errors.thumbnailUrl}</p>}
-            </div>
-          </div>
-          
-          <div className={styles.item}>
-            <label htmlFor="content" className={styles.label}>内容</label>
-            <div>
-              <textarea  name="content" id="content" placeholder="内容を入力してください" value={content} onChange={e => setContent(e.target.value)} disabled={isSubmit} />
-              {errors.content && <p className={styles.error}>{errors.content}</p>}
-            </div>
-          </div>
-
-          <div className={styles.item} role="group" aria-labelledby="category-label">
-            <p id="category-label" className={styles.label}>カテゴリー</p>
-            <div>
-              <div className={styles.checkboxGroup}>
-                {categories.map((category) => (
-                  <label key={category.id}>
-                    <input
-                    type="checkbox"
-                    value={category.id}
-                    checked={selectedCategoryIds.includes(category.id)}
-                    onChange={e => {
-                      if (e.target.checked) {
-                        setSelectedCategoryIds([...selectedCategoryIds, category.id]);
-                      } else {
-                        setSelectedCategoryIds(selectedCategoryIds.filter(id => id !== category.id));
-                      }
-                    }}
-                    disabled={isSubmit} />
-                    {category.name}
-                  </label>
-                ))}
-              </div>
-              {errors.selectedCategoryIds && <p className={styles.error}>{errors.selectedCategoryIds}</p>}
-            </div>
-          </div>
-
-          <div className={styles.btn}>
-            <button type="submit" disabled={isSubmit}>
-              更 新
-            </button>
-            <button type="button" disabled={isSubmit} className={styles.deleteBtn} onClick={handleDelete}>
-              削 除
-            </button>
-          </div>
-        </form>
-      </section>
+      <PostForm
+        title={title}
+        setTitle={setTitle}
+        thumbnailUrl={thumbnailUrl}
+        setThumbnailUrl={setThumbnailUrl}
+        content={content}
+        setContent={setContent}
+        categories={categories}
+        selectedCategoryIds={selectedCategoryIds}
+        setSelectedCategoryIds={setSelectedCategoryIds}
+        errors={errors}
+        isSubmit={isSubmit}
+        handleSubmit={handleSubmit}
+        handleDelete={handleDelete}
+        submitLabel="更 新"
+      />
     </>
-
   );
-};
+}

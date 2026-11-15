@@ -72,23 +72,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         title,
         content,
         thumbnailUrl,
-      },
-    });
-
-    await prisma.postCategory.deleteMany({
-      where: {
-        postId: post.id,
+        postCategories: {
+          deleteMany: {},
+          create: categories.map((c) => ({ categoryId: c.id })),
+        },
       },
     });
     
-    for (const category of categories) {
-      await prisma.postCategory.create({
-        data: {
-          postId: post.id,
-          categoryId: category.id,
-        },
-      });
-    }
     return NextResponse.json({ id: post.id }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {

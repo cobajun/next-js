@@ -1,7 +1,6 @@
 "use client"
 import { PostForm } from '@/app/admin/posts/_components/PostForm';
-import { useEffect, useState } from 'react';
-import type { AdminCategoriesIndexResponse } from '@/app/api/admin/categories/route';
+import { useState } from 'react';
 import type { AdminCreatePostRequest } from '@/app/api/admin/posts/route';
 
 type Errors = {
@@ -13,26 +12,9 @@ export default function CreatePost() {
   const [title, setTitle] = useState<string>('');
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [categories, setCategories] = useState<AdminCategoriesIndexResponse['categories']>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const res = await fetch("/api/admin/categories");
-        if (!res.ok) {
-          throw new Error('カテゴリの取得に失敗しました。');
-        }
-        const { categories } = await res.json();
-        setCategories(categories);
-      } catch {
-        alert('カテゴリの取得に失敗しました。時間をおいて再度お試しください。');
-      }
-    };
-    getCategories();
-  }, []);
 
   const validate = () => {
     const validateErrs: Errors = {};
@@ -104,7 +86,6 @@ export default function CreatePost() {
         setThumbnailUrl={setThumbnailUrl}
         content={content}
         setContent={setContent}
-        categories={categories}
         selectedCategoryIds={selectedCategoryIds}
         setSelectedCategoryIds={setSelectedCategoryIds}
         errors={errors}

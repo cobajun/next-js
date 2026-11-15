@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from 'react';
-import type { AdminCategoriesIndexResponse } from '@/app/api/admin/categories/route';
 import type { AdminPostShowResponse, AdminUpdatePostRequest } from '@/app/api/admin/posts/[id]/route';
 import { useParams, useRouter } from 'next/navigation';
 import { PostForm } from '../_components/PostForm';
@@ -15,26 +14,9 @@ export default function ModifyPost() {
   const [title, setTitle] = useState<string>('');
   const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [categories, setCategories] = useState<AdminCategoriesIndexResponse['categories']>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<Errors>({});
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const res = await fetch("/api/admin/categories");
-        if (!res.ok) {
-          throw new Error('カテゴリの取得に失敗しました。');
-        }
-        const { categories } = await res.json();
-        setCategories(categories);
-      } catch {
-        alert('カテゴリの取得に失敗しました。時間をおいて再度お試しください。');
-      }
-    };
-    getCategories();
-  }, []);
 
   useEffect(() => {
     const getPost = async () => {
@@ -141,7 +123,6 @@ export default function ModifyPost() {
         setThumbnailUrl={setThumbnailUrl}
         content={content}
         setContent={setContent}
-        categories={categories}
         selectedCategoryIds={selectedCategoryIds}
         setSelectedCategoryIds={setSelectedCategoryIds}
         errors={errors}

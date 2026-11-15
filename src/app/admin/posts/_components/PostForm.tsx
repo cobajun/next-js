@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useState } from 'react';
 import styles from '@/app/admin/_styles/form.module.css';
 import type { AdminCategoriesIndexResponse } from '@/app/api/admin/categories/route';
 
@@ -9,7 +10,6 @@ type Props = {
   setThumbnailUrl: (thumbnailUrl: string) => void;
   content: string;
   setContent: (content: string) => void;
-  categories: AdminCategoriesIndexResponse['categories'];
   selectedCategoryIds: number[];
   setSelectedCategoryIds: (selectedCategoryIds: number[]) => void;
   errors: { [key: string]: string };
@@ -19,7 +19,24 @@ type Props = {
   submitLabel: string;
 }
 
-export const PostForm = ({title, setTitle, thumbnailUrl, setThumbnailUrl, content, setContent, categories, selectedCategoryIds, setSelectedCategoryIds, errors, isSubmit, handleSubmit, handleDelete, submitLabel}: Props) => {
+export const PostForm = ({title, setTitle, thumbnailUrl, setThumbnailUrl, content, setContent, selectedCategoryIds, setSelectedCategoryIds, errors, isSubmit, handleSubmit, handleDelete, submitLabel}: Props) => {
+  const [categories, setCategories] = useState<AdminCategoriesIndexResponse['categories']>([]);
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const res = await fetch("/api/admin/categories");
+        if (!res.ok) {
+          throw new Error('カテゴリの取得に失敗しました。');
+        }
+        const { categories } = await res.json();
+        setCategories(categories);
+      } catch {
+        alert('カテゴリの取得に失敗しました。時間をおいて再度お試しください。');
+      }
+    };
+    getCategories();
+  }, []);
+  
   return (
     <section className={styles.form}>
       <form onSubmit={handleSubmit}>

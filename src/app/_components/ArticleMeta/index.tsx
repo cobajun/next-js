@@ -2,8 +2,8 @@
 import styles from './ArticleMeta.module.css';
 
 type Props = {
-  createdAt: string;
-  categories: { id: string; name: string }[]
+  createdAt: string | Date;
+  categories: { id: number ; name: string }[]
 }
 
 export const ArticleMeta = ({ createdAt, categories }: Props) => {

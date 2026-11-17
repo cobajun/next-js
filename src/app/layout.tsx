@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
 import { Header } from '@/app/_components/Header';
+import { MainWrapper } from '@/app/_components/MainWrapper';
 
 const zenKaku = Zen_Kaku_Gothic_New({
   weight: ["400", "500"],
@@ -19,11 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ja" className={zenKaku.variable}>
       <body>
         <Header />
-        <main className="main">
-          <div className="inner">
-            {children}
-          </div>
-        </main>
+        <MainWrapper>{children}</MainWrapper>
       </body>
     </html>
   );

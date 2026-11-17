@@ -4,34 +4,30 @@ import { ArticleMeta } from '@/app/_components/ArticleMeta';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import type { MicroCmsPost } from '@/app/_types/posts';
+import type { PostShowResponse } from '@/app/api/posts/[id]/route';
 import Image from 'next/image';
 
 export default function ArticleDetail() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [post, setPost] = useState<MicroCmsPost | null>(null);
+  const [post, setPost] = useState<PostShowResponse['post'] | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const getData = async () => {
+    const getPost = async () => {
       try {
-        const res = await fetch(`https://subacoba.microcms.io/api/v1/posts/${id}`, {
-          headers: {
-            'X-MICROCMS-API-KEY': process.env.NEXT_PUBLIC_MICROCMS_API_KEY || '',
-          },
-        });
+        const res = await fetch(`/api/posts/${id}`);
         if (!res.ok) {
           throw new Error();
         }
-        const data = await res.json();
-        setPost(data);
+        const {post} = await res.json();
+        setPost(post);
       } catch {
         setError('記事の取得に失敗しました。');
       } finally {
         setIsLoading(false);
       }
     };
-    getData();
+    getPost();
   }, [id]);
 
   if (isLoading) {
@@ -67,14 +63,17 @@ export default function ArticleDetail() {
   return (
     <>
       <article className={styles.detail}>
-        
-        <ArticleMeta createdAt={post.createdAt} categories={post.categories} />
+        <ArticleMeta createdAt={post.createdAt} categories={post.postCategories.map(pc => pc.category)} />
         <div className={styles.body}>
           <h1 className={styles.title}>{post.title}</h1>
-          <div className={styles.contents} dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className={styles.contents}>
+            <p>
+              { post.content}
+            </p>
+          </div>
         </div>
         <div className={styles.main}>
-          <Image src={post.thumbnail.url} alt="" width={800} height={800} />
+          <Image src={post.thumbnailUrl} alt="" width={800} height={800} />
         </div>
         <div className={styles.back}>
           <Link href="/" className={styles.btn}>
